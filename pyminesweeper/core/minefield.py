@@ -4,7 +4,7 @@ import numpy as np
 from pyminesweeper.core import Cell
 
 
-class Board(tuple):
+class MineField(tuple):
 
 
     def __init__(self, tup):
@@ -23,7 +23,7 @@ class Board(tuple):
 
         self._num_mines = 0
         self._mine_locations = []
-        self._board_ready = False
+        self._is_playing = False
 
     def _place_mine_at(self, row, col):
 
@@ -56,7 +56,7 @@ class Board(tuple):
                 if not self[r][c].is_mine:
                     self[r][c].number = self._count_surrounding(r,c)
 
-        self._board_ready = True
+        self._is_playing = True
 
     def _count_surrounding(self, row_id, col_id):
         return sum(1 for (surr_row, surr_col) in self._get_neighbours(row_id, col_id)
@@ -71,6 +71,25 @@ class Board(tuple):
 
     def _is_inside_field(self, row_id, col_id):
         return 0 <= row_id < self.num_rows and 0 <= col_id < self.num_cols
+
+    def reveal_cells(self, row_id, col_id):
+        '''
+            A recursive method to reveal safe cells.
+            Reveals the selected cell. If it is safe, and has no mines around it, adjacent cells are revealed.
+            If the selected cell is a mine, game is over.
+
+        '''
+        cell = self[row_id][col_id]
+        if not cell.is_visible:
+            self[row_id][col_id].show()
+
+            if (cell.is_mine and not
+                cell.is_flagged):
+                self._is_playing = False
+            elif self[row_id,col_id].number == 0:
+                for (surr_row, surr_col) in self.get_neighbours(row_id, col_id):
+                    if self.is_in_range(surr_row, surr_col):
+                        self.reveal_cells(surr_row, surr_col) 
 
 
     @classmethod
@@ -88,12 +107,17 @@ class Board(tuple):
 
         return board
 
+    @property
+    def is_safe(self):
+        return self._is_playing
+    
+
 
 class Game:
 
     def __init__(self, row, col, num_mines):
 
-        self._minefield = Board.create_new(row, col, num_mines)
+        self._minefield = MineField.create_new(row, col, num_mines)
         self._game_on = True
 
     @property

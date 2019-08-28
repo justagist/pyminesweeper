@@ -1,3 +1,3 @@
 
 from .cell import Cell
-from .game import Game
+from .minefield import Game, MineField
