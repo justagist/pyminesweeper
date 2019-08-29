@@ -13,7 +13,8 @@ class Cell(object):
         self.is_visible = True
 
     def flag(self):
-        self.is_flagged = not self.is_flagged
+        if not self.is_visible:
+            self.is_flagged = not self.is_flagged
 
     def _place_mine(self):
         self._is_mine = True
@@ -32,7 +33,7 @@ class Cell(object):
                 return 'X'
             else:
                 return str(self._number)
-        return '  '
+        return ' '
 
     def __repr__(self):
 
@@ -144,6 +145,8 @@ class MineField(tuple):
                 for (surr_row, surr_col) in self._get_neighbours(row_id, col_id):
                     if self._is_inside_field(surr_row, surr_col):
                         self.reveal_cells(surr_row, surr_col) 
+
+        print ("safe cells revealed: %d\n total: %d"%(self.revealed_safe_cells,self.safe_cells))
 
     def flag_cell(self, row_id, col_id):
 

@@ -65,7 +65,8 @@ class Game:
 
                 if self._shut_down_when_finished:
                     if self._status == Game.GameStatus.FAILED:
-                        raise Exception("Game Over: Cell at [%d,%d] was a mine!"%(row,col))
+                        print("Game Over: Cell at [%d,%d] was a mine!"%(row,col))
+                        sys.exit()
                     elif self._status == Game.GameStatus.WON:
                         print ("\n\tGame Won!\n")
                         sys.exit()
