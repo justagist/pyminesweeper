@@ -113,8 +113,8 @@ class GUI(GameInterface):
             self._draw_covers()
 
             tipFont = pygame.font.SysFont(FONTTYPE, 16) ## not using self._BASICFONT - too big
-            self._draw_text('Tip: Highlight a box and press space (rather than click the mouse)', tipFont, TEXTCOLOR_3, WINDOWWIDTH/2, WINDOWHEIGHT-60)
-            self._draw_text('to mark areas that you think contain mines.', tipFont, TEXTCOLOR_3, WINDOWWIDTH/2, WINDOWHEIGHT-40)
+            self._draw_text('Tip: Highlight a box and right click ', tipFont, TEXTCOLOR_3, WINDOWWIDTH/2, WINDOWHEIGHT-60)
+            self._draw_text('to flag cells that you think contain mines.', tipFont, TEXTCOLOR_3, WINDOWWIDTH/2, WINDOWHEIGHT-40)
 
             # ----- determine boxes at clicked areas
             box_x, box_y = self._get_box_at_pixel(mouse_x, mouse_y)
