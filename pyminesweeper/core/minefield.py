@@ -1,7 +1,43 @@
 
 import random
-import numpy as np
-from pyminesweeper.core import Cell
+
+class Cell(object):
+    def __init__(self, is_mine, is_visible=False, is_flagged=False):
+        self._is_mine = is_mine
+        self.is_visible = is_visible
+        self.is_flagged = is_flagged
+
+        self._number = None # Number of mines in the neighbourhood
+
+    def show(self):
+        self.is_visible = True
+
+    def flag(self):
+        self.is_flagged = not self.is_flagged
+
+    def _place_mine(self):
+        self._is_mine = True
+
+    def get_number(self):
+        if self.is_visible:
+            return self._number
+        else:
+            return None
+
+    def __str__(self):
+        if self.is_flagged:
+            return 'F'
+        if self.is_visible:
+            if self._is_mine:
+                return 'X'
+            else:
+                return str(self._number)
+        return '  '
+
+    def __repr__(self):
+
+        return self.__str__()
+
 
 
 class MineField(tuple):
@@ -21,16 +57,19 @@ class MineField(tuple):
 
         assert self.num_rows == self.num_cols, "Invalid size for board. Num of rows: %d, Num of cols: %d"%(self.num_rows, self.num_cols)
 
+        self.revealed_safe_cells = 0
         self._num_mines = 0
         self._mine_locations = []
         self._is_playing = False
 
     def _place_mine_at(self, row, col):
-
-        if not self[row][col].is_mine:
-            self[row][col]._place_mine()
-            self._mine_locations.append([row,col])
-            self._num_mines += 1
+        if not self._is_playing:
+            if not self[row][col]._is_mine:
+                self[row][col]._place_mine()
+                self._mine_locations.append([row,col])
+                self._num_mines += 1
+        else:
+            raise Exception("Error: Should not add mine after initialising MineField!")
 
     def _place_random_mines(self, num_mines):
 
@@ -46,22 +85,28 @@ class MineField(tuple):
             else: 
                 self._place_mine_at(x, y)
 
-    def _initialise(self):
+    def initialise(self):
         '''
             Has to be run before running the game.
 
         '''
-        for r in range(self.num_rows):
-            for c in range(self.num_cols):
-                if not self[r][c].is_mine:
-                    self[r][c].number = self._count_surrounding(r,c)
+        if not self._is_playing and self._num_mines > 0 and self._num_mines <= (self.num_rows*self.num_cols - 4) and self._num_mines == len(self._mine_locations):  
+            self.safe_cells = self.num_rows*self.num_cols - self._num_mines
 
-        self._is_playing = True
+            for r in range(self.num_rows):
+                for c in range(self.num_cols):
+                    if not self[r][c]._is_mine:
+                        self[r][c]._number = self._count_surrounding(r,c)
+
+            self._is_playing = True
+        else:
+            print ("Error while Initialising MineField: Check number of mines!")
+        return self._is_playing
 
     def _count_surrounding(self, row_id, col_id):
         return sum(1 for (surr_row, surr_col) in self._get_neighbours(row_id, col_id)
                         if (self._is_inside_field(surr_row, surr_col) and
-                            self[surr_row][surr_col].is_mine))
+                            self[surr_row][surr_col]._is_mine))
 
     def _get_neighbours(self, row_id, col_id):
         SURROUNDING = ((-1, -1), (-1,  0), (-1,  1),
@@ -82,14 +127,26 @@ class MineField(tuple):
         cell = self[row_id][col_id]
         if not cell.is_visible:
             self[row_id][col_id].show()
+            self.revealed_safe_cells += 1
 
-            if (cell.is_mine and not
+            if (cell._is_mine and not
                 cell.is_flagged):
+                assert [row_id,col_id] in self._mine_locations
                 self._is_playing = False
-            elif self[row_id,col_id].number == 0:
-                for (surr_row, surr_col) in self.get_neighbours(row_id, col_id):
-                    if self.is_in_range(surr_row, surr_col):
+                self.revealed_safe_cells -= 1
+
+            elif self[row_id][col_id]._number == 0:
+                for (surr_row, surr_col) in self._get_neighbours(row_id, col_id):
+                    if self._is_inside_field(surr_row, surr_col):
                         self.reveal_cells(surr_row, surr_col) 
+
+    def flag_cell(self, row_id, col_id):
+
+        self[row_id][col_id].flag()
+
+    # @property
+    # def current_state():
+    #     return []
 
 
     @classmethod
@@ -103,26 +160,37 @@ class MineField(tuple):
 
         board._place_random_mines(num_mines)
 
-        board._initialise()
-
         return board
 
     @property
-    def is_safe(self):
+    def is_intact(self):
         return self._is_playing
+
+    def __str__(self):
+        '''
+            To String method: shows minefield row by row, including flags and revealed cells.
+            Flagged cells are marked 'F'
+            Mines are marked 'X'
+
+        '''
+        retval = ''
+        for row in self:
+            retval += str(row) + '\n'
+
+        return retval
     
 
 
-class Game:
-
-    def __init__(self, row, col, num_mines):
-
-        self._minefield = MineField.create_new(row, col, num_mines)
-        self._game_on = True
-
-    @property
-    def minefield(self):
-        return self._minefield
+if __name__ == '__main__':
     
 
+    field = MineField.create_new(5,5,5)
+    field.initialise()
 
+    print (field)
+
+    # field.flag_cell(1,1)
+
+    field.reveal_cells(0,0)
+
+    print (field)
