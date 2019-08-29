@@ -36,11 +36,15 @@ class GameInterface:
 		'''
 		assert self._game.status != Game.GameStatus.NOT_RUNNING, "Error: Game is not Running!"
 
+		print(self._game.minefield)
+
 		while self._game.status == Game.GameStatus.RUNNING:
 
 			row, col, action = self.get_input()
 
 			self._game.play_move(row,col, action)
+
+			print(self._game.minefield)
 
 		if self._game.status == Game.GameStatus.FAILED:
 			self.game_lost()
@@ -61,8 +65,7 @@ class GameInterface:
 
 		'''
 		self._game.minefield.reveal_all()
-		print ("You lost!\n\nSolution:\n%s"%self._game.minefield)
-
+		print ("You lost!\n\nSolution:\n%s"%str(self._game.minefield))
 
 
 
