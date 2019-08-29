@@ -20,7 +20,7 @@ setup(
     keywords = "minesweeer, game",
     # url = "https://bitbucket.org/justagist/reinfor_learn",
     packages=find_packages(),
-    scripts=['pyminesweeper/commandlinescripts/testpypackage'],
+    scripts=['pyminesweeper/commandlinescripts/pyminesweeper'],
     install_requires=[
           'pygame', 'numpy'
       ],
