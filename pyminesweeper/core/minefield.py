@@ -42,6 +42,11 @@ class Cell(object):
 
 class MineField(tuple):
 
+    '''
+        An object of this class (the return value itself) is a list of list (representing the minefield) of strings with each value in the list being either 'F' for 'flagged' cells, 'X' for revealed mines, a number (as string) for revealed cells, '  ' for hidden cells.
+
+    '''
+
 
     def __init__(self, tup):
         ''' 
@@ -132,7 +137,7 @@ class MineField(tuple):
             if (cell._is_mine and not
                 cell.is_flagged):
                 assert [row_id,col_id] in self._mine_locations
-                self._is_playing = False
+                self.stop_play()
                 self.revealed_safe_cells -= 1
 
             elif self[row_id][col_id]._number == 0:
@@ -147,6 +152,17 @@ class MineField(tuple):
     # @property
     # def current_state():
     #     return []
+    def stop_play(self):
+        self._is_playing = False
+
+    def reveal_all(self):
+
+        if not self._is_playing:
+            for r in range(self.num_rows):
+                for c in range(self.num_cols):
+                    self[r][c].show()
+        else:
+            raise Exception("Cannot reveal all cells when still in play. End game using stop_play() method (of MineField class) if required.")
 
 
     @classmethod
@@ -165,6 +181,10 @@ class MineField(tuple):
     @property
     def is_intact(self):
         return self._is_playing
+
+    @property
+    def revealed_all_safe_cells(self):
+        return self.revealed_safe_cells == self.safe_cells
 
     def __str__(self):
         '''
