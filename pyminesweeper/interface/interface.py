@@ -19,7 +19,7 @@ class GameInterface:
 		'''
 			Has to be implemented in derived class
 
-			@Return:
+			@Return -- something meaningful (for example):
 				row: integer representing row in minefield
 				col: integer representing col in minefield
 				action: A GameAction enum value representing action to perform at [row,col] (GAME.GameAction.REVEAL / GAME.GameAction.FLAG)
@@ -58,13 +58,13 @@ class GameInterface:
 
 		'''
 		print ("Yaay! Game Won!")
-
+	
 	def game_lost(self):
 		'''
 			Override in derived class if required
 
 		'''
-		self._game.minefield.reveal_all()
+		self._game.end_and_reveal_field()
 		print ("You lost!\n\nSolution:\n%s"%str(self._game.minefield))
 
 

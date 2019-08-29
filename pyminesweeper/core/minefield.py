@@ -11,6 +11,8 @@ class Cell(object):
 
     def show(self):
         self.is_visible = True
+        if not self._is_mine:
+            self.is_flagged = False
 
     def flag(self):
         if not self.is_visible:
@@ -135,8 +137,7 @@ class MineField(tuple):
             self[row_id][col_id].show()
             self.revealed_safe_cells += 1
 
-            if (cell._is_mine and not
-                cell.is_flagged):
+            if (cell._is_mine):
                 assert [row_id,col_id] in self._mine_locations
                 self.stop_play()
                 self.revealed_safe_cells -= 1
@@ -145,8 +146,6 @@ class MineField(tuple):
                 for (surr_row, surr_col) in self._get_neighbours(row_id, col_id):
                     if self._is_inside_field(surr_row, surr_col):
                         self.reveal_cells(surr_row, surr_col) 
-
-        print ("safe cells revealed: %d\n total: %d"%(self.revealed_safe_cells,self.safe_cells))
 
     def flag_cell(self, row_id, col_id):
 
@@ -158,12 +157,13 @@ class MineField(tuple):
     def stop_play(self):
         self._is_playing = False
 
-    def reveal_all(self):
+    def reveal_all(self, only_mines = True):
 
         if not self._is_playing:
             for r in range(self.num_rows):
                 for c in range(self.num_cols):
-                    self[r][c].show()
+                    if self[r][c]._is_mine:
+                        self[r][c].show()
         else:
             raise Exception("Cannot reveal all cells when still in play. End game using stop_play() method (of MineField class) if required.")
 

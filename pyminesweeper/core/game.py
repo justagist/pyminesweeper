@@ -24,6 +24,8 @@ class Game:
         self._shut_down_when_finished = end_program_when_game_finishes
         self._status = Game.GameStatus.NOT_RUNNING
 
+        self.field_info = [row, col, num_mines]
+
     @property
     def minefield(self):
         return self._minefield
@@ -77,6 +79,10 @@ class Game:
             raise Exception("Game is not running!")
 
         return self._status
+
+    def end_and_reveal_field(self, only_mines = True):
+        self._minefield.stop_play()
+        self._minefield.reveal_all(only_mines = only_mines)
 
 
 if __name__ == '__main__':
