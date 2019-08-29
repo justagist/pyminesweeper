@@ -8,3 +8,7 @@
 /*.egg-info
 
 /build/
+
+pyminesweeper/core/test.py
+
+pyminesweeper/tests/
