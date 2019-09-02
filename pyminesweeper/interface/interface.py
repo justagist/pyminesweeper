@@ -1,4 +1,13 @@
+''' 
 
+A base class for providing interface between a Game instance and a solver. It is incomplete on its own. See 'example_keyboard_interface.py' for example.
+
+
+    @author: JustaGist (saifksidhik@gmail.com)
+    @file: interface.py
+    @package: pyminesweeper v0.9
+
+'''
 from pyminesweeper.core import Game
 
 

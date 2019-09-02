@@ -1,5 +1,16 @@
 #!/usr/bin/python3
 
+''' 
+
+The Game class for solving an instance of Minefield. The interface class can be used to interact with the Minefield in a Game.
+
+
+    @author: JustaGist (saifksidhik@gmail.com)
+    @file: game.py
+    @package: pyminesweeper v0.9
+
+'''
+
 import sys
 from pyminesweeper.core import MineField
 from enum import Enum, unique
@@ -28,10 +39,16 @@ class Game:
 
     @property
     def minefield(self):
+        '''
+            Return the Minefield object associated with this instance of Game.
+        '''
         return self._minefield
 
     @property
     def is_running(self):
+        '''
+            Check if the game is still running, and not ended (lost/won)
+        '''
         return self._status == Game.GameStatus.RUNNING
 
     @property

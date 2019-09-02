@@ -1,4 +1,13 @@
+''' 
 
+A PyGame GUI for PyMinesweeper defined using the Interface base class.  
+
+
+    @author: JustaGist (saifksidhik@gmail.com)
+    @file: gui.py
+    @package: pyminesweeper v0.9
+
+'''
 import pygame, sys
 from pygame.locals import *
 from pyminesweeper.interface import GameInterface

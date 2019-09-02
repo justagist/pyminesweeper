@@ -1,10 +1,22 @@
+''' 
 
+An Example child class to show the usage of the Interface super class. This class implements an interactive interface using the std out and keyboard input.
+
+
+    @author: JustaGist (saifksidhik@gmail.com)
+    @file: example_keyboard_interface.py
+    @package: pyminesweeper v0.9
+
+'''
 from pyminesweeper.core import Game
 from pyminesweeper.interface import GameInterface
 
 class ExampleKeyboardInterface(GameInterface):
 
 	def get_input(self):
+		'''
+			Get keyboard input from user in the format: <row> <col> <action>
+		'''
 
 		inp =  input("Enter <row> <col> <action>: ").split()
 

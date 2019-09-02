@@ -1,3 +1,13 @@
+''' 
+
+The base classes for defining a minefield.
+
+
+    @author: JustaGist (saifksidhik@gmail.com)
+    @file: minefield.py
+    @package: pyminesweeper v0.9
+
+'''
 
 import random
 
@@ -10,6 +20,9 @@ class Cell(object):
         self._number = None # Number of mines in the neighbourhood
 
     def show(self):
+        '''
+            Reveal the content of the cell. This function merely makes the cell 'visible', and hence its _number property accessible.
+        '''
         self.is_visible = True
         if not self._is_mine:
             self.is_flagged = False

@@ -12,7 +12,7 @@ def read(fname):
 
 setup(
     name = "pyminesweeper",
-    version = "0.1",
+    version = "0.9",
     author = "JustaGist",
     author_email = "saifksidhik@gmail.com",
     description = ("minesweeper game written in python 3"),
