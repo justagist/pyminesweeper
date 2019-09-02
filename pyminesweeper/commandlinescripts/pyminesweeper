@@ -1,4 +1,13 @@
+''' 
 
+Command line script for running PyMinesweeper using the GUI interface (gui.py)
+
+
+    @author: JustaGist (saifksidhik@gmail.com)
+    @file: pyminesweeper
+    @package: pyminesweeper v1.3
+
+'''
 from argparse import ArgumentParser
 from pyminesweeper.interface import GUI
 from pyminesweeper.core import Game
