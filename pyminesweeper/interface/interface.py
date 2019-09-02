@@ -58,13 +58,13 @@ class GameInterface:
 
 		'''
 		print ("Yaay! Game Won!")
-	
+
 	def game_lost(self):
 		'''
 			Override in derived class if required
 
 		'''
-		self._game.end_and_reveal_field()
+		self._game.end_and_reveal_field(only_mines=True)
 		print ("You lost!\n\nSolution:\n%s"%str(self._game.minefield))
 
 

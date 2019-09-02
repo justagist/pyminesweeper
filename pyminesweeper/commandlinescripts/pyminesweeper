@@ -1,10 +1,42 @@
 
-
+from argparse import ArgumentParser
 from pyminesweeper.interface import GUI
 from pyminesweeper.core import Game
 
 if __name__ == '__main__':
-    
-    gui = GUI(Game(15,15,50,False))
+    parser = ArgumentParser(prog = "PyMinesweeper", allow_abbrev = False)
+    group = parser.add_mutually_exclusive_group()
+    group.add_argument("--easy", action = "store_true", help = "Set difficulty level to Easy")
+    group.add_argument("--medium", action = "store_true", help = "Set difficulty level to Medium")
+    group.add_argument("--hard", action = "store_true", help = "Set difficulty level to Hard")
+    group.add_argument("--custom", action = "store_true", help = "Set custom difficulty level. Should provide as additional arguments:--size (int): size of minefield (number of cells on a side); --mines (int): number of mines.")
+    parser.add_argument("--size", type = int, default = 0, choices = range(3,30), help = "Argument required if difficulty is set to Custom.")
+    parser.add_argument("--mines", type = int, default = 0, choices = range(1,70), help = "Argument required if difficulty is set to Custom. Should be less than (number of cells in minefield minus 4 (no mines allowed in corners)")
+
+
+
+    args = parser.parse_args()
+    print(args)
+
+    if args.custom:
+        if (args.size < 3 or args.mines < 1):
+            raise Exception("Provide custom size and number of mines as additional arguments. See usage.")
+        else:
+            size = args.size
+            n_mines = args.mines
+
+    elif args.easy:
+        size, n_mines = 10, 10
+
+
+    elif args.hard:
+        size, n_mines = 30, 100
+
+    else:
+        size, n_mines = 20, 40
+
+
+        
+    gui = GUI(Game(size, size, n_mines, False))
 
     gui.run()
